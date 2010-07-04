@@ -1,3 +1,7 @@
+This is the result of a blog post on creating a testable Sinatra app. If you just want to use it, clone
+the repository, and start hacking. Below is the blog post that created it, which can also be found at
+http://blog.blankpad.net/2010/07/04/starting-a-testable-sinatra-application/.
+
 I'm getting into using Sinatra for smaller web applications, instead of the behemoth that is Rails.
 
 For many purposes, Rails is still perfect, but I often find that it can be overkill if all you need
