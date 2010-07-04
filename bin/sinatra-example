@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+current_dir = File.expand_path(File.dirname(__FILE__))
+base_dir = current_dir + '/../lib'
+$: << base_dir unless $:.include?(base_dir) 
+
+require 'rack'
+require 'application'
+
+Rack::Handler::WEBrick.run \
+  Application,
+  :Port => 9292
