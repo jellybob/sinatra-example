@@ -6,7 +6,7 @@ I'm getting into using Sinatra for smaller web applications, instead of the behe
 
 For many purposes, Rails is still perfect, but I often find that it can be overkill if all you need
 is to display a couple of pages, and possibly provide an API. Here's a quick guide on creating a
-Sinatra application that can be tested using RSpec and Cucumber.
+Sinatra application that can be tested using RSpec2 (actually beta) and Cucumber.
 
 Install Bundler, and Create a Gemfile
 -------------------------------------
@@ -32,7 +32,7 @@ gems our application needs. Put the following in it for now:
       gem "cucumber-sinatra"
       gem "cucumber"
       gem "capybara"
-      gem "rspec"
+      gem "rspec", "~> 2.0.0.beta"
     end
 
 Now when you run `bundle install` it'll install any dependencies that are required.
@@ -142,21 +142,19 @@ Now lets create some rake tasks to run them - put this in `Rakefile`:
 
 Now when you run the rake tasks you'll get the appropriate features run.
 
-And now for some RSpec
-----------------------
+And now for some RSpec2
+-----------------------
 
-Finally, we're going to set up RSpec. This probably won't be at all unusual to you if you've done it
+Finally, we're going to set up RSpec2. This probably won't be at all unusual to you if you've done it
 before, but I'm going to demonstrate it as well.
 
 In your Rakefile:
 
-    require 'spec/rake/spectask'
+    require 'rspec/core/rake_task'
 
     namespace :spec do
       desc "Run all examples"
-      Spec::Rake::SpecTask.new('spec') do |t|
-        t.spec_files = FileList['spec/**/*_spec.rb']
-      end
+      RSpec::Core::RakeTask.new('all')
     end
 
 Then put this in `spec/spec_helper.rb` to make sure anything in lib/ can be loaded correctly:
