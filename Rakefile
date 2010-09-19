@@ -17,5 +17,6 @@ namespace :features do
 end
 
 namespace :spec do
+  desc "Run all examples"
   RSpec::Core::RakeTask.new('all')
 end
