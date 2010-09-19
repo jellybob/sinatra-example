@@ -100,7 +100,7 @@ Lets write a feature to test that our simple application is in fact working. Put
       When I go to the home page
       Then I should see "Hello, world!"
 
-When you run it with `bundle exec features/hello.feature` it should pass.
+When you run it with `bundle exec cucumber features/hello.feature` it should pass.
 
 Cucumber Profiles
 -----------------
