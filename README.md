@@ -6,7 +6,7 @@ I'm getting into using Sinatra for smaller web applications, instead of the behe
 
 For many purposes, Rails is still perfect, but I often find that it can be overkill if all you need
 is to display a couple of pages, and possibly provide an API. Here's a quick guide on creating a
-Sinatra application that can be tested using RSpec and Cucumber.
+Sinatra application that can be tested using RSpec2 (actually beta) and Cucumber.
 
 Install Bundler, and Create a Gemfile
 -------------------------------------
@@ -32,7 +32,7 @@ gems our application needs. Put the following in it for now:
       gem "cucumber-sinatra"
       gem "cucumber"
       gem "capybara"
-      gem "rspec"
+      gem "rspec", "~> 2.0.0.beta"
     end
 
 Now when you run `bundle install` it'll install any dependencies that are required.
@@ -66,7 +66,7 @@ Put the following in `lib/application.rb`.
       %body
         %h1 Hello, world!
 
-Just to check that it's all working, dump this in `config.ru`, which will load everything using 
+Just to check that it's all working, dump this in `config.ru`, which will load everything using
 Bundler.
 
     $: << "lib"
@@ -88,7 +88,7 @@ That will tell you about the files it's generating. Lets have a look at `feature
 is where Cucumber gets configured. You'll see that it simply loads `application.rb` and then tells
 Capybara (the component that actually runs web apps) that the application under test is `Application`.
 
-Lets write a feature to test that our simple application is in fact working. Put this in 
+Lets write a feature to test that our simple application is in fact working. Put this in
 `features/hello.feature`.
 
     Feature: Welcoming new developers
@@ -109,7 +109,7 @@ By using profiles we can make use of the WIP (Work in Progress) tag to reduce th
 our features when we're only interested in one or two features.
 
 Start by creating `cucumber.yml` and put the following in it:
-    
+
     <% common = "--strict features" %>
     default: --format progress <%= common %>
     wip: --format pretty --tags @wip <%= common %>
@@ -125,7 +125,7 @@ Now lets create some rake tasks to run them - put this in `Rakefile`:
 
     require 'cucumber'
     require 'cucumber/rake/task'
-    
+
     namespace :features do
       Cucumber::Rake::Task.new(:all) do |t|
         t.profile = "default"
@@ -134,7 +134,7 @@ Now lets create some rake tasks to run them - put this in `Rakefile`:
       Cucumber::Rake::Task.new(:ok) do |t|
         t.profile = "ok"
       end
-      
+
       Cucumber::Rake::Task.new(:all) do |t|
         t.profile = "wip"
       end
@@ -142,21 +142,19 @@ Now lets create some rake tasks to run them - put this in `Rakefile`:
 
 Now when you run the rake tasks you'll get the appropriate features run.
 
-And now for some RSpec
-----------------------
+And now for some RSpec2
+-----------------------
 
-Finally, we're going to set up RSpec. This probably won't be at all unusual to you if you've done it
+Finally, we're going to set up RSpec2. This probably won't be at all unusual to you if you've done it
 before, but I'm going to demonstrate it as well.
 
 In your Rakefile:
 
-    require 'spec/rake/spectask'
-    
+    require 'rspec/core/rake_task'
+
     namespace :spec do
       desc "Run all examples"
-      Spec::Rake::SpecTask.new('spec') do |t|
-        t.spec_files = FileList['spec/**/*_spec.rb']
-      end
+      RSpec::Core::RakeTask.new('all')
     end
 
 Then put this in `spec/spec_helper.rb` to make sure anything in lib/ can be loaded correctly:
@@ -165,7 +163,7 @@ Then put this in `spec/spec_helper.rb` to make sure anything in lib/ can be load
 
 And that's about it. Create a `spec` directory, and start filling it up with specs ending in `_spec.rb`,
 like this one (in `spec/application_spec.rb`):
-    
+
     require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
     require 'application'
 
@@ -182,3 +180,4 @@ That's as far as I'm going to go with this for now. Go write some code.
 
 You can find the end result of this in the [sinatra-example](http://github.com/jellybob/sinatra-example)
 project under my [GitHub account](http://github.com/jellybob/).
+
